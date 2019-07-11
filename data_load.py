@@ -157,7 +157,6 @@ def _get_mfcc_and_spec(wav, preemphasis_coeff, n_fft, win_length, hop_length):
     # Get mfccs, amp to db
     mag_db = amp2db(mag)
     mel_db = amp2db(mel)
-    # mfccs = np.dot(librosa.filters.dct(hp.default.n_mfcc, mel_db.shape[0]), mel_db)
     mfccs = scipy.fftpack.dct(mel_db, axis=0, type=2,
                           norm='ortho')[:hp.default.n_mfcc]
 
