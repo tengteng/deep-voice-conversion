@@ -106,11 +106,11 @@ class Net2(ModelDesc):
                        hp.default.sr) // hp.default.hop_length + 1
 
         return [
-            tf.TensorSpect((None, n_timesteps, hp.default.n_mfcc), tf.float32,
+            tf.TensorSpec((None, n_timesteps, hp.default.n_mfcc), tf.float32,
                            'x_mfccs'),
-            tf.TensorSpect((None, n_timesteps, hp.default.n_fft // 2 + 1),
+            tf.TensorSpec((None, n_timesteps, hp.default.n_fft // 2 + 1),
                            tf.float32, 'y_spec'),
-            tf.TensorSpect((None, n_timesteps, hp.default.n_mels), tf.float32,
+            tf.TensorSpec((None, n_timesteps, hp.default.n_mels), tf.float32,
                            'y_mel'),
         ]
 
