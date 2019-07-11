@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # /usr/bin/python2
 
-
 from __future__ import print_function
 
 import argparse
@@ -18,7 +17,6 @@ from tensorpack.predict.config import PredictConfig
 from tensorpack.tfutils.sessinit import SaverRestore
 from tensorpack.tfutils.sessinit import ChainInit
 from tensorpack.callbacks.base import Callback
-
 
 # class ConvertCallback(Callback):
 #     def __init__(self, logdir, test_per_epoch=1):
@@ -57,10 +55,16 @@ def convert(predictor, df):
     y_spec = np.power(y_spec, hp.convert.emphasis_magnitude)
 
     # Spectrogram to waveform
-    audio = np.array(map(lambda spec: spec2wav(spec.T, hp.default.n_fft, hp.default.win_length, hp.default.hop_length,
-                                               hp.default.n_iter), pred_spec))
-    y_audio = np.array(map(lambda spec: spec2wav(spec.T, hp.default.n_fft, hp.default.win_length, hp.default.hop_length,
-                                                 hp.default.n_iter), y_spec))
+    audio = np.array(
+        map(
+            lambda spec:
+            spec2wav(spec.T, hp.default.n_fft, hp.default.win_length, hp.
+                     default.hop_length, hp.default.n_iter), pred_spec))
+    y_audio = np.array(
+        map(
+            lambda spec:
+            spec2wav(spec.T, hp.default.n_fft, hp.default.win_length, hp.
+                     default.hop_length, hp.default.n_iter), y_spec))
 
     # Apply inverse pre-emphasis
     audio = inv_preemphasis(audio, coeff=hp.default.preemphasis)
@@ -89,24 +93,31 @@ def do_convert(args, logdir1, logdir2):
     df = Net2DataFlow(hp.convert.data_path, hp.convert.batch_size)
 
     ckpt1 = tf.train.latest_checkpoint(logdir1)
-    ckpt2 = '{}/{}'.format(logdir2, args.ckpt) if args.ckpt else tf.train.latest_checkpoint(logdir2)
+    ckpt2 = '{}/{}'.format(
+        logdir2,
+        args.ckpt) if args.ckpt else tf.train.latest_checkpoint(logdir2)
     session_inits = []
     if ckpt2:
         session_inits.append(SaverRestore(ckpt2))
     if ckpt1:
         session_inits.append(SaverRestore(ckpt1, ignore=['global_step']))
-    pred_conf = PredictConfig(
-        model=model,
-        input_names=get_eval_input_names(),
-        output_names=get_eval_output_names(),
-        session_init=ChainInit(session_inits))
+    pred_conf = PredictConfig(model=model,
+                              input_names=get_eval_input_names(),
+                              output_names=get_eval_output_names(),
+                              session_init=ChainInit(session_inits))
     predictor = OfflinePredictor(pred_conf)
 
     audio, y_audio, ppgs = convert(predictor, df)
 
     # Write the result
-    tf.summary.audio('A', y_audio, hp.default.sr, max_outputs=hp.convert.batch_size)
-    tf.summary.audio('B', audio, hp.default.sr, max_outputs=hp.convert.batch_size)
+    tf.summary.audio('A',
+                     y_audio,
+                     hp.default.sr,
+                     max_outputs=hp.convert.batch_size)
+    tf.summary.audio('B',
+                     audio,
+                     hp.default.sr,
+                     max_outputs=hp.convert.batch_size)
 
     # Visualize PPGs
     heatmap = np.expand_dims(ppgs, 3)  # channel=1
@@ -130,8 +141,12 @@ def do_convert(args, logdir1, logdir2):
 
 def get_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('case1', type=str, help='experiment case name of train1')
-    parser.add_argument('case2', type=str, help='experiment case name of train2')
+    parser.add_argument('case1',
+                        type=str,
+                        help='experiment case name of train1')
+    parser.add_argument('case2',
+                        type=str,
+                        help='experiment case name of train2')
     parser.add_argument('-ckpt', help='checkpoint to load model.')
     arguments = parser.parse_args()
     return arguments
@@ -143,7 +158,8 @@ if __name__ == '__main__':
     logdir_train1 = '{}/{}/train1'.format(hp.logdir_path, args.case1)
     logdir_train2 = '{}/{}/train2'.format(hp.logdir_path, args.case2)
 
-    print('case1: {}, case2: {}, logdir1: {}, logdir2: {}'.format(args.case1, args.case2, logdir_train1, logdir_train2))
+    print('case1: {}, case2: {}, logdir1: {}, logdir2: {}'.format(
+        args.case1, args.case2, logdir_train1, logdir_train2))
 
     s = datetime.datetime.now()
 

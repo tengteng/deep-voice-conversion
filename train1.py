@@ -62,7 +62,7 @@ def train(args, logdir):
 
 def get_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('case', type=str, help='experiment case name')
+    parser.add_argument('-case', type=str, help='experiment case name')
     parser.add_argument('-ckpt', help='checkpoint to load model.')
     parser.add_argument('-gpu', help='comma separated list of GPU(s) to use.')
     arguments = parser.parse_args()
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     hp.set_hparam_yaml(args.case)
     logdir_train1 = '{}/train1'.format(hp.logdir)
 
-    print('case: {}, logdir: {}'.format(args.case1, args.case, logdir_train1))
+    print('case: {}, logdir: {}'.format(args.case, logdir_train1))
 
     train(args, logdir=logdir_train1)
 
