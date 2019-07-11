@@ -54,10 +54,21 @@ Net2 contains Net1 as a sub-network.
 
 ## Implementations
 ### Requirements
-* python 2.7
-* tensorflow >= 1.1
-* numpy >= 1.11.1
-* librosa == 0.5.1
+- tensorflow        1.13.1   gpu_py36h26cf82e_0   anaconda
+- tensorflow-gpu    1.14.0   pypi_0    pypi
+- tensorflow-plot   0.3.1    pypi_0    pypi
+- tensorpack        0.9.5    pypi_0    pypi
+- numpy             1.16.4   pypi_0    pypi
+- scipy             1.2.1    pypi_0    pypi
+- pydub             0.23.1   py_0      conda-forge
+- librosa           0.7.0    py_0      conda-forge
+- cudatoolkit       9.0      h13b8566_0   anaconda
+- cudnn             7.6.0    cuda9.0_0    anaconda
+- python            3.6.4    hc3d631a_3
+* `conda install -c conda-forge pydub`
+* `pip install tensorpack`
+* `conda install librosa -c conda-forge`
+* `pip install tensorflow-plot`
 
 ### Settings
 * sample rate: 16,000Hz
